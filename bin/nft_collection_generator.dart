@@ -22,17 +22,11 @@ class NftDataBase {
     18: "Poster"
   };
 
-  Map<int, String> _preBenefits = {};
-
-  //This collection will filter the final result
-  List<String> pre_collection = [];
-
   final List<String> _collection = [];
 
   Map<int, String> get benefits => _benefits;
 
   List<String> get collection => _collection;
-  int long;
 
   List<String> benefitCollection(longitude) {
     List<int> record = [];

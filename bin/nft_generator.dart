@@ -4,8 +4,10 @@ import 'package:path/path.dart';
 import 'package:excel/excel.dart';
 import 'nft_model.dart';
 
-int getAverage(x, per) {
-  var res = x * per;
+int pointer;
+
+int getAverage(total, percentage) {
+  num res = (total * percentage) / 100;
   return res.round();
 }
 
@@ -16,27 +18,30 @@ void main(List<String> arguments) {
 }
 
 void createCollections(nft) {
-  int contenedor = 100;
+  int total = 1000;
   var excel = Excel.createExcel();
   int index = 1, breaker = 1, counter = 1;
 
-  List percentages = [.20, .15, .15, .20, .20, .10];
+  List percentages = [22, 22, 21, 16, 15, 4];
   Sheet sheetObject = excel['Lista NFTs'];
+
   CellStyle cellStyle = CellStyle(
-    fontFamily: getFontFamily(FontFamily.Calibri),
-  );
-  for (int i = 0; i < contenedor; i++) {
+      fontFamily: getFontFamily(FontFamily.Calibri),
+      verticalAlign: VerticalAlign.Center,
+      textWrapping: TextWrapping.Clip);
+  for (int i = 0; i < total; i++) {
     //LOOP THAT CREATES EACH NFT
 //AGREGATES THE NFT ORDERED BY BENEFITS
     var generator = NftDataBase(); //DATABASE
-    print("Breaker es de $breaker y Counter es de $counter");
+    //  print("Breaker es de $breaker y Counter es de $counter");
     var title = sheetObject.cell(
       //CELL TITLE INITIALIZATION
       CellIndex.indexByString("A$index"),
     );
+
     title.value = index; //CELL VALUE
     title.cellStyle = cellStyle;
-    print("A$index = ${title.value}");
+    //  print("A$index = ${title.value}");
     var model = NFTModel(
       //MODEL
       nft: nft,
@@ -47,9 +52,10 @@ void createCollections(nft) {
         CellIndex.indexByString("B$index"))
       ..value = model.collection[0].isNotEmpty ? model.collection[0] : null
       ..cellStyle = cellStyle;
-    print("B$index = ${bene1.value}");
+    //  print("B$index = ${bene1.value}");
+    pointer = getAverage(total, percentages[0]);
 
-    if (index < getAverage(contenedor, percentages[1]).round()) {
+    if (index < pointer) {
       //LOOP BREAKER HASTA EL 15% DEL TOTAL
       index++; //De esta manera se procura que index sea dentro del porcentaje de NFTS de todo el contenido
       continue;
@@ -58,6 +64,7 @@ void createCollections(nft) {
         breaker++;
         counter++;
         index++;
+        // assert(index == 151);
         continue;
       }
     }
@@ -65,9 +72,11 @@ void createCollections(nft) {
     var bene2 = sheetObject.cell(CellIndex.indexByString("C$index"))
       ..value = model.collection[1].isNotEmpty ? model.collection[1] : null
       ..cellStyle = cellStyle;
-    print("C$index = ${bene2.value}");
+    //  print("C$index = ${bene2.value}");
+    var x = getAverage(total, percentages[1]);
+    pointer += x;
     if (index < //LOOP BREAKER HASTA EL 35% DEL TOTAL
-        getAverage(contenedor, (percentages[1] + percentages[2])).round() + 1) {
+        pointer) {
       index++;
       continue;
     } else {
@@ -80,13 +89,13 @@ void createCollections(nft) {
     }
 
     var bene3 = sheetObject.cell(CellIndex.indexByString("D$index"))
-      ..value = model.collection[1].isNotEmpty ? model.collection[2] : null
+      ..value = model.collection[2].isNotEmpty ? model.collection[2] : null
       ..cellStyle = cellStyle;
-    print("D$index = ${bene3.value}");
+    //  print("D$index = ${bene3.value}");
+    x = getAverage(total, percentages[2]);
+    pointer += x;
     if (index < //LOOP BREAKER HASTA EL 50% DEL TOTAL
-        getAverage(
-                contenedor, (percentages[1] + percentages[2] + percentages[3]))
-            .round()) {
+        pointer) {
       index++;
       continue;
     } else {
@@ -103,12 +112,11 @@ void createCollections(nft) {
     )
       ..value = model.collection[3].isNotEmpty ? model.collection[3] : null
       ..cellStyle = cellStyle;
-    print("B$index = ${bene4.value}");
+    //  print("E$index = ${bene4.value}");
+    x = getAverage(total, percentages[3]);
+    pointer += x;
     if (index < //LOOP BREAKER HASTA EL 70% DEL TOTAL
-        getAverage(
-          contenedor,
-          (percentages[1] + percentages[2] + percentages[3] + percentages[4]),
-        ).round()) {
+        pointer) {
       index++;
       continue;
     } else {
@@ -125,12 +133,11 @@ void createCollections(nft) {
     )
       ..value = model.collection[4].isNotEmpty ? model.collection[4] : null
       ..cellStyle = cellStyle;
-    print("B$index = ${bene5.value}");
+    // print("F$index = ${bene5.value}");
+    x = getAverage(total, percentages[4]);
+    pointer += x;
     if (index < //LOOP BREAKER HASTA EL 90% DEL TOTAL
-        getAverage(
-          contenedor,
-          (percentages[1] + percentages[2] + percentages[3] + percentages[4]),
-        ).round()) {
+        pointer) {
       index++;
       continue;
     } else {
@@ -143,12 +150,11 @@ void createCollections(nft) {
     }
 
     var bene6 = sheetObject.cell(
-      CellIndex.indexByString("F$index"),
+      CellIndex.indexByString("G$index"),
     )
       ..value = model.collection[5].isNotEmpty ? model.collection[5] : null
       ..cellStyle = cellStyle;
-
-    print(index);
+    index++;
   }
 
   excel.encode().then(
