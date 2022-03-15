@@ -2,45 +2,60 @@ import 'dart:math';
 
 class NftDataBase {
   final Map<int, String> _benefits = {
-    0: "Water included",
-    1: "soda",
-    2: "beer",
-    3: "2x1",
-    4: "toilets",
-    5: "Wifi",
-    6: "vip",
-    7: "sound check",
-    8: "fastpass",
-    9: "food",
-    10: "poster",
-    11: "first row",
-    12: "photo with head liner (M&G)",
-    13: "transport",
-    14: "50%Off",
-    15: "Recharge Station",
-    16: "PARKING LOT",
-    17: "OPEN BAR"
+    1: "Photo with the head liner (M&G)",
+    2: "Open bar",
+    3: "Beer",
+    4: "2x1",
+    5: "Vip",
+    6: "sound check",
+    7: "first row",
+    8: "Food",
+    9: "50%off",
+    10: "Transport",
+    11: "Soda",
+    12: "Water included",
+    13: "Toilets",
+    14: "Wifi",
+    15: "Fast past",
+    16: "Recharge station",
+    17: "Parking lot",
+    18: "Poster"
   };
+
+  Map<int, String> _preBenefits = {};
+
+  //This collection will filter the final result
+  List<String> pre_collection = [];
 
   final List<String> _collection = [];
 
   Map<int, String> get benefits => _benefits;
 
   List<String> get collection => _collection;
-  List<String> get benefitCollection => _benefitCollection();
-  List<String> _benefitCollection() {
+  int long;
+
+  List<String> benefitCollection(longitude) {
     List<int> record = [];
     do {
       int length = _benefits.length;
-      var random = Random().nextInt(length);
-      var r = random;
+      var r = Random().nextInt(length) + 1;
 
       if (!record.contains(r)) {
         record.add(r);
-        _collection.add(_benefits[r].toString());
+        _collection.add(
+          _benefits[r].toString(),
+        );
       }
-    } while (_collection.length < 3);
+    } while (_collection.length < longitude);
 
     return _collection;
   }
 }
+
+
+
+// Necesito hacer un documento excel el cual tenga 1000 celdas. 
+// La celda A* corresponderá a la llave del elemento.
+// La celda B* corresponderá al primer BENEFICIO* y así consecutivamente
+//SERÁ UN PROCESO?????
+// Todo en una función? o una función secuencial???
